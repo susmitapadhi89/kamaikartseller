@@ -1,0 +1,173 @@
+/* Custom styles for orders page */
+.status-select .MuiSelect-select {
+  border-radius: 20px !important;
+  font-weight: 600;
+  text-transform: capitalize;
+  min-height: 32px !important;
+}
+
+/* Remove border from select */
+.status-select .MuiOutlinedInput-notchedOutline {
+  border: none !important;
+}
+
+/* Status color variants */
+.status-pending {
+  background-color: #fef3cd !important;
+  color: #856404 !important;
+}
+
+.status-confirmed {
+  background-color: #cce7ff !important;
+  color: #004085 !important;
+}
+
+.status-processing {
+  background-color: #e2e3ff !important;
+  color: #383d81 !important;
+}
+
+.status-shipped {
+  background-color: #e0e7ff !important;
+  color: #3730a3 !important;
+}
+
+.status-delivered {
+  background-color: #d1fae5 !important;
+  color: #065f46 !important;
+}
+
+.status-cancelled {
+  background-color: #fed7d7 !important;
+  color: #c53030 !important;
+}
+
+/* Table responsive design */
+@media (max-width: 768px) {
+  .product-table {
+    font-size: 0.875rem;
+  }
+
+  .product-table th,
+  .product-table td {
+    padding: 0.5rem;
+  }
+}
+
+/* Hover effects */
+.hover-lift:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Order status badges */
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+/* Order Details Page Styles */
+.order-timeline {
+  position: relative;
+}
+
+.order-timeline::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #e5e7eb;
+}
+
+.order-timeline-step {
+  position: relative;
+  z-index: 1;
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-break {
+    page-break-before: always;
+  }
+
+  body {
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+
+  .container {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .bg-gray-50 {
+    background: white !important;
+  }
+
+  .shadow-md {
+    box-shadow: none !important;
+  }
+
+  .border {
+    border: 1px solid #000 !important;
+  }
+}
+
+/* Hover effects */
+.order-item:hover {
+  transform: translateY(-1px);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Status badges with animation */
+.status-badge {
+  transition: all 0.3s ease-in-out;
+}
+
+.status-badge:hover {
+  transform: scale(1.05);
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

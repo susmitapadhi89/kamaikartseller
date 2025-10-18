@@ -1,0 +1,113 @@
+[
+  {
+    "id": "122",
+    "product_id": "93",
+    "sku": "SKU-93-1758366919317-Z4XI",
+    "price": "1.00",
+    "shipping_cost": "0.00",
+    "selling_price": "1.00",
+    "stock": 1,
+    "attributes": [
+      {
+        "id": "309",
+        "product_id": "93",
+        "variant_id": "122",
+        "attribute_id": "48",
+        "attribute_value_id": "29",
+        "attribute": {
+          "id": "48",
+          "name": "color",
+          "input_type": "a"
+        },
+        "attribute_value": {
+          "id": "29",
+          "value": "red"
+        }
+      },
+      {
+        "id": "310",
+        "product_id": "93",
+        "variant_id": "122",
+        "attribute_id": "21",
+        "attribute_value_id": "40",
+        "attribute": {
+          "id": "21",
+          "name": "size",
+          "input_type": "dropdown"
+        },
+        "attribute_value": {
+          "id": "40",
+          "value": "S"
+        }
+      }
+    ],
+    "attribute_variant_value": "red/S",
+    "images": [
+      "https://www.kamaikart.in/api/uploads/products/1758366919295-531475764.png"
+    ]
+  },
+  {
+    "id": "123",
+    "product_id": "93",
+    "sku": "SKU-93-1758366919333-EU7X",
+    "price": "2.00",
+    "shipping_cost": "0.00",
+    "selling_price": "2.00",
+    "stock": 2,
+    "attributes": [
+      {
+        "id": "311",
+        "product_id": "93",
+        "variant_id": "123",
+        "attribute_id": "48",
+        "attribute_value_id": "31",
+        "attribute": {
+          "id": "48",
+          "name": "color",
+          "input_type": "a"
+        },
+        "attribute_value": {
+          "id": "31",
+          "value": "blue"
+        }
+      },
+      {
+        "id": "312",
+        "product_id": "93",
+        "variant_id": "123",
+        "attribute_id": "21",
+        "attribute_value_id": "40",
+        "attribute": {
+          "id": "21",
+          "name": "size",
+          "input_type": "dropdown"
+        },
+        "attribute_value": {
+          "id": "40",
+          "value": "S"
+        }
+      }
+    ],
+    "attribute_variant_value": "blue/S",
+    "images": [
+      "https://www.kamaikart.in/api/uploads/products/1758366919299-67212885.jpg"
+    ]
+  },
+  {
+    "attributes": [
+      {
+        "attribute_value_id": "40",
+        "value": "S"
+      },
+      {
+        "attribute_id": "48",
+        "attribute_value_id": "34",
+        "value": "pink"
+      }
+    ],
+    "price": "1",
+    "selling_price": "1",
+    "stock": "1",
+    "images": [{}]
+  }
+]

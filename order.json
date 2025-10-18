@@ -1,0 +1,66 @@
+{
+  "orders": [
+    {
+      "id": 49,
+      "orderNumber": "ORD-49",
+      "customer": {
+        "name": "user",
+        "email": "user3390@gmail.com",
+        "phone": "99999999huyu"
+      },
+      "items": [
+        {
+          "id": 71,
+          "productName": "ee",
+          "productImage": "https://www.kamaikart.in/api/uploads/products/1758202684599-238473883.jpg",
+          "variant": null,
+          "quantity": 1,
+          "price": 11
+        },
+        {
+          "id": 70,
+          "productName": "The M4 Luxius",
+          "productImage": "https://www.kamaikart.in/api/uploads/products/1760077030958-713012054.jpg",
+          "variant": "XXL, black",
+          "quantity": 1,
+          "price": 1212
+        }
+      ],
+      "itemsCount": 2,
+      "totalAmount": 1345.3,
+      "orderDate": "2025-10-16T10:09:36.233Z",
+      "orderStatus": "pending",
+      "paymentStatus": "paid",
+      "paymentMethod": "Cash on Delivery",
+      "shippingAddress": {
+        "id": 19,
+        "user_id": 5,
+        "name": "Sohan",
+        "phone_number": "9409694074",
+        "area": "Kothariya",
+        "flat": "901",
+        "postal_code": "360002",
+        "address1": "Kokhaddad",
+        "address2": "Rajkot",
+        "address_tag": "OTHER",
+        "default_address": true,
+        "is_deleted": false,
+        "createdAt": "2025-10-08T13:08:28.429Z",
+        "updatedAt": "2025-10-08T13:08:28.429Z"
+      },
+      "subtotal": 1223,
+      "shippingCharge": 0,
+      "taxAmount": 0,
+      "grandTotal": 0
+    }
+  ],
+  "pagination": {
+    "totalItems": 8,
+    "totalPages": 1,
+    "currentPage": 1,
+    "itemsPerPage": 10,
+    "totalOrders": 8,
+    "pendingOrders": 2,
+    "totalRevenue": 37875
+  }
+}
