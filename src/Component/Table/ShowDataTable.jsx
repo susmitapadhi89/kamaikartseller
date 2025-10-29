@@ -36,7 +36,7 @@ export const DataTable = ({
             <tbody className="text-gray-700">
               {loading ? (
                 <tr>
-                  <td colSpan={columns.length} className="py-8 text-center">
+                  <td colSpan={columns.length} className=" text-center">
                     <div className="flex justify-center items-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                       <span className="ml-2">Loading...</span>

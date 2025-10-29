@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
+import { UpdateOrderStatus } from "../Redux/Features/OrderServiceSlice";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  FaArrowLeft,
-  FaPrint,
   FaDownload,
   FaBox,
   FaShippingFast,
@@ -15,7 +14,6 @@ import {
   FaPhone,
   FaEnvelope,
   FaShoppingBag,
-  FaCreditCard,
   FaRupeeSign,
   FaTruck,
   FaUndo,
@@ -30,13 +28,14 @@ import {
 } from "react-icons/fa";
 
 import { GetSellerOrdersByID } from "../Redux/Features/OrderServiceSlice";
+import toast from "react-hot-toast";
 
 export const SellerOrderDetails = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { PersonalOrderData, loading, updating, error } = useSelector(
+  const { PersonalOrderData, orderloading, ordererror } = useSelector(
     (state) => state.OrderOpration
   );
 
@@ -107,7 +106,16 @@ export const SellerOrderDetails = () => {
     }
 
     const newStatus = action === "dispatch" ? "shipped" : "return_completed";
-    // Implementation for status update
+    try {
+      await dispatch(
+        UpdateOrderStatus({ orderId, status: newStatus })
+      ).unwrap();
+
+      toast.success(`Order marked as ${newStatus.toUpperCase()} successfully!`);
+      dispatch(GetSellerOrdersByID(orderId)); // refresh order data
+    } catch (error) {
+      toast.error("Failed to update status: " + error);
+    }
   };
 
   // Download invoice
@@ -121,11 +129,6 @@ export const SellerOrderDetails = () => {
     };
     console.log("Downloading invoice:", invoiceData);
     alert(`Invoice downloaded for order ${PersonalOrderData.orderNumber}`);
-  };
-
-  // Print order
-  const handlePrintOrder = () => {
-    window.print();
   };
 
   // Get address tag icon
@@ -201,7 +204,7 @@ export const SellerOrderDetails = () => {
   };
 
   // Show loading state
-  if (loading) {
+  if (orderloading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
         <div className="text-center">
@@ -216,7 +219,7 @@ export const SellerOrderDetails = () => {
   }
 
   // Show error state
-  if (error) {
+  if (ordererror) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8 text-center">
@@ -226,7 +229,7 @@ export const SellerOrderDetails = () => {
           <h2 className="text-2xl font-bold text-gray-800 mb-2">
             Failed to Load Order
           </h2>
-          <p className="text-red-600 mb-6">{error}</p>
+          <p className="text-red-600 mb-6">{ordererror}</p>
           <div className="flex gap-3 justify-center">
             <button
               onClick={() => dispatch(GetSellerOrdersByID(orderId))}
@@ -324,12 +327,12 @@ export const SellerOrderDetails = () => {
                 {canDispatch && (
                   <button
                     onClick={() => handleStatusUpdate("dispatch")}
-                    disabled={updating}
+                    disabled={orderloading}
                     className="flex items-center space-x-3 px-6 py-3 bg-blue-300  text-black rounded-xl hover:from-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl transform "
                   >
                     <FaTruck className="w-5 h-5" />
                     <span>
-                      {updating ? "Dispatching..." : "Dispatch Order"}
+                      {orderloading ? "Dispatching..." : "Dispatch Order"}
                     </span>
                   </button>
                 )}
@@ -337,12 +340,12 @@ export const SellerOrderDetails = () => {
                 {canMarkReturnReceived && (
                   <button
                     onClick={() => handleStatusUpdate("return_received")}
-                    disabled={updating}
+                    disabled={orderloading}
                     className="flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-semibold"
                   >
                     <FaUndo className="w-5 h-5" />
                     <span>
-                      {updating ? "Processing..." : "Return Received"}
+                      {orderloading ? "Processing..." : "Return Received"}
                     </span>
                   </button>
                 )}
@@ -355,14 +358,6 @@ export const SellerOrderDetails = () => {
                 >
                   <FaDownload className="w-4 h-4" />
                   <span>Invoice</span>
-                </button>
-
-                <button
-                  onClick={handlePrintOrder}
-                  className="flex items-center space-x-2 px-4 py-3 border-2 border-gray-200 bg-white text-gray-600 rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 shadow-md hover:shadow-lg font-medium"
-                >
-                  <FaPrint className="w-4 h-4" />
-                  <span>Print</span>
                 </button>
               </div>
             </div>
@@ -684,51 +679,6 @@ export const SellerOrderDetails = () => {
                       </p>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Enhanced Payment Information */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-orange-50">
-                <h2 className="text-xl font-bold text-gray-900 flex items-center">
-                  <FaCreditCard className="w-6 h-6 mr-3 text-orange-600" />
-                  Payment Information
-                </h2>
-              </div>
-
-              <div className="p-6 space-y-4">
-                <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                  <span className="text-gray-600">Payment Method</span>
-                  <span className="font-semibold text-gray-900">
-                    {PersonalOrderData.paymentMethod || "Not specified"}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                  <span className="text-gray-600">Payment Status</span>
-                  <span
-                    className={`px-4 py-2 rounded-xl text-sm font-semibold ${
-                      PersonalOrderData.paymentStatus === "paid"
-                        ? "bg-green-100 text-green-800 border border-green-200"
-                        : PersonalOrderData.paymentStatus === "pending"
-                        ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
-                        : "bg-red-100 text-red-800 border border-red-200"
-                    }`}
-                  >
-                    {(PersonalOrderData.paymentStatus || "unknown")
-                      ?.charAt(0)
-                      .toUpperCase() +
-                      (PersonalOrderData.paymentStatus || "unknown")?.slice(1)}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center py-3">
-                  <span className="text-gray-600">Amount Paid</span>
-                  <span className="font-bold text-gray-900 flex items-center text-lg">
-                    <FaRupeeSign className="w-5 h-5 mr-1" />
-                    {(PersonalOrderData.totalAmount || 0)?.toLocaleString()}
-                  </span>
                 </div>
               </div>
             </div>

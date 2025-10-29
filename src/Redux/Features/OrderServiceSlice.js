@@ -5,9 +5,10 @@ import { OrderDetailService } from "../Services/OrderAPi";
 
 export const GetSellerOrders = createAsyncThunk(
   "order/GetSellerOrders",
-  async (_, { rejectWithValue }) => {
+  async (params = {}, { rejectWithValue }) => {
     try {
-      const res = await OrderDetailService.GetOrderDetails();
+      const query = new URLSearchParams(params).toString();
+      const res = await OrderDetailService.GetOrderDetails(query);
 
       return res.data;
     } catch (error) {
@@ -28,19 +29,17 @@ export const GetSellerOrdersByID = createAsyncThunk(
     }
   }
 );
-// export const UpdateOrderStatus = createAsyncThunk(
-//   "order/UpdateOrderStatus",
-//   async ({ orderId, status }, { rejectWithValue }) => {
-//     try {
-//       const response = await api.put(`/seller/orders/${orderId}/status`, {
-//         status,
-//       });
-//       return response.data;
-//     } catch (error) {
-//       return rejectWithValue(error.response?.data || error.message);
-//     }
-//   }
-// );
+export const UpdateOrderStatus = createAsyncThunk(
+  "order/UpdateOrderStatus",
+  async ({ orderId, status }, { rejectWithValue }) => {
+    try {
+      const data = await OrderDetailService.ChangedOrderStatus(orderId, status);
+      return { orderId, status, response: data };
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
 
 // export const DownloadOrderInvoice = createAsyncThunk(
 //   "order/DownloadOrderInvoice",
@@ -62,14 +61,14 @@ export const orderServices = createSlice({
   initialState: {
     orders: [],
     PersonalOrderData: [],
-    loading: false,
-    error: null,
+    orderloading: false,
+    ordererror: null,
     OrderPagination: null,
     currentOrder: null,
   },
   reducers: {
     clearOrderError: (state) => {
-      state.error = null;
+      state.ordererror = null;
     },
     setCurrentOrder: (state, action) => {
       state.currentOrder = action.payload;
@@ -79,37 +78,50 @@ export const orderServices = createSlice({
     builder
       // Get Seller Orders
       .addCase(GetSellerOrders.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.orderloading = true;
+        state.ordererror = null;
       })
       .addCase(GetSellerOrders.fulfilled, (state, action) => {
-        state.loading = false;
+        state.orderloading = false;
         state.orders = action.payload.data;
         state.OrderPagination = {
-          totalItems: action.payload.totalOrders,
+          totalOrders: action.payload.totalOrders,
           currentPage: action.payload.currentPage,
           totalPages: action.payload.totalPages,
           pageSize: action.payload.pageSize,
         };
       })
       .addCase(GetSellerOrders.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        state.orderloading = false;
+        state.ordererror = action.payload;
       })
       .addCase(GetSellerOrdersByID.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.orderloading = true;
+        state.ordererror = null;
       })
       .addCase(GetSellerOrdersByID.fulfilled, (state, action) => {
-        state.loading = false;
-        console.log(action.payload);
-        console.log(action.payload.data);
+        state.orderloading = false;
 
         state.PersonalOrderData = action.payload.data;
       })
       .addCase(GetSellerOrdersByID.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        state.orderloading = false;
+        state.ordererror = action.payload;
+      })
+      .addCase(UpdateOrderStatus.pending, (state) => {
+        state.orderloading = true;
+      })
+      .addCase(UpdateOrderStatus.fulfilled, (state, action) => {
+        state.orderloading = false;
+        const { orderId, status } = action.payload;
+        // ✅ update local state instantly
+        state.orders = state.orders.map((order) =>
+          order.id === orderId ? { ...order, status } : order
+        );
+      })
+      .addCase(UpdateOrderStatus.rejected, (state, action) => {
+        state.orderloading = false;
+        state.ordererror = action.payload;
       });
   },
 });

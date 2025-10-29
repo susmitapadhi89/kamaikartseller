@@ -4,7 +4,6 @@ export const Pagination = ({
   onPageChange,
   itemsPerPage,
   onItemsPerPageChange,
-  totalItems,
   showItemsPerPage = true,
 }) => {
   const getPageNumbers = () => {
@@ -100,14 +99,6 @@ export const Pagination = ({
             Last
           </button>
         </div>
-
-        {totalItems && (
-          <div className="text-sm text-gray-700 text-center sm:text-left">
-            Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-            {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems}{" "}
-            entries
-          </div>
-        )}
       </div>
     </div>
   );

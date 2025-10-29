@@ -36,6 +36,7 @@ export const ListProducts = () => {
   const { MainCategorydata, SubCategorydata, SubSubCategorydata } = useSelector(
     (state) => state.CategoryOpration
   );
+
   const {
     Products,
     loading,
@@ -400,6 +401,7 @@ export const ListProducts = () => {
       </div>
 
       {/* Controls Section */}
+
       <div className="bg-white p-4 rounded-lg shadow-md mb-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           {/* Left side: Search and Filter */}
@@ -458,7 +460,7 @@ export const ListProducts = () => {
               </Select>
             </FormControl>
 
-            {/* Brand Filter */}
+            {/* Brand FiFormControllter */}
             <FormControl fullWidth size="small">
               <InputLabel>Brand</InputLabel>
               <Select
@@ -524,6 +526,7 @@ export const ListProducts = () => {
             </FormControl>
 
             {/* Sub Category Filter */}
+
             <FormControl
               fullWidth
               size="small"
@@ -603,6 +606,7 @@ export const ListProducts = () => {
       </div>
 
       {/* Pagination Controls - Top */}
+
       <Pagination
         currentPage={currentPage}
         totalPages={paginationInfo?.totalPages || 1}

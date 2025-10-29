@@ -1,9 +1,25 @@
 import { API } from "../../../Axios";
 
 export const OrderDetailService = {
-  GetOrderDetails: async () => {
+  GetOrderDetails: async (query) => {
     try {
-      const res = await API.get("/seller/getOrders", {
+      const res = await API.get(
+        `/seller/getOrders?${query}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+
+      return res;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  GetOrderDetailsByID: async (orderId) => {
+    try {
+      const res = await API.get(`/seller/getOrders/${orderId}`, {
         withCredentials: true,
       });
 
@@ -12,11 +28,14 @@ export const OrderDetailService = {
       throw error.response?.data || error.message;
     }
   },
-  GetOrderDetailsByID: async (orderId) => {
+
+  ChangedOrderStatus: async (orderId, status) => {
     try {
-      const res = await API.get(`/seller/getOrders/${orderId}`, {
-        withCredentials: true,
-      });
+      const res = await API.put(
+        "/seller/updateOrderStatus",
+        { orderId, status }, // ✅ correct JSON body
+        { withCredentials: true }
+      );
 
       return res;
     } catch (error) {
