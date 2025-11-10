@@ -57,6 +57,18 @@ export const Sidebar = ({
         },
       ],
     },
+    {
+      name: "Orders",
+      icon: <ShoppingBagIcon />,
+      path: "/seller/order",
+      children: [
+        {
+          name: "Order Products",
+          icon: <ListIcon />,
+          path: "/seller/order/orderlist",
+        },
+      ],
+    },
     // {
     //   name: "Inventory",
     //   icon: <Inventory />,

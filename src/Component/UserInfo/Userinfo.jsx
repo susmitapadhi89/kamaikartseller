@@ -204,7 +204,7 @@ export const Profileinfo = () => {
                 <h2 className="text-xl font-semibold text-gray-800">
                   {userData.name}
                 </h2>
-                <p className="text-gray-600">{userData.role_id}</p>
+                <p className="text-gray-600">{userData.role_name}</p>
               </div>
 
               <div className="flex space-x-2">
@@ -280,7 +280,7 @@ export const Profileinfo = () => {
                       User Type
                     </label>
                     <p className="px-3 py-2 bg-gray-100 border border-transparent rounded-md">
-                      {userData.role_id}
+                      {userData.role_name}
                     </p>
                   </div>
                 </div>

@@ -93,10 +93,13 @@ export const ProductForm = ({ mode, initialData = {}, onSubmit }) => {
   const removeImage = useCallback((index) => {
     setProduct((prev) => {
       const imgs = [...prev.images];
-      imgs.splice(index, 1);
+      const [removed] = imgs.splice(index, 1);
       return {
         ...prev,
         images: imgs,
+        image_ids_to_delete: removed?.id
+          ? [...(prev.image_ids_to_delete || []), removed.id]
+          : prev.image_ids_to_delete || [],
       };
     });
   }, []);

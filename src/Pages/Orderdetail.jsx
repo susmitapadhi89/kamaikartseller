@@ -93,30 +93,77 @@ export const SellerOrderDetails = () => {
   };
 
   // Status update handler
-  const handleStatusUpdate = async (action) => {
-    if (!PersonalOrderData) return;
+  // const handleStatusUpdate = async (action) => {
+  //   if (!PersonalOrderData) return;
 
-    const confirmMessage =
-      action === "dispatch"
-        ? "Are you sure you want to dispatch this order?"
-        : "Are you sure you want to mark this return as received?";
+  //   const confirmMessage =
+  //     action === "dispatch"
+  //       ? "Are you sure you want to dispatch this order?"
+  //       : "Are you sure you want to mark this return as received?";
 
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
+  //   if (!window.confirm(confirmMessage)) {
+  //     return;
+  //   }
 
-    const newStatus = action === "dispatch" ? "shipped" : "return_completed";
-    try {
-      await dispatch(
-        UpdateOrderStatus({ orderId, status: newStatus })
-      ).unwrap();
+  //   const newStatus = action === "dispatch" ? "shipped" : "return_completed";
+  //   try {
+  //     await dispatch(
+  //       UpdateOrderStatus({ orderId, status: newStatus })
+  //     ).unwrap();
 
-      toast.success(`Order marked as ${newStatus.toUpperCase()} successfully!`);
-      dispatch(GetSellerOrdersByID(orderId)); // refresh order data
-    } catch (error) {
-      toast.error("Failed to update status: " + error);
-    }
-  };
+  //     toast.success(`Order marked as ${newStatus.toUpperCase()} successfully!`);
+  //     dispatch(GetSellerOrdersByID(orderId)); // refresh order data
+  //   } catch (error) {
+  //     toast.error("Failed to update status: " + error);
+  //   }
+  // };
+  // const handleStatusUpdate = async (newStatus) => {
+  //   if (!PersonalOrderData || !newStatus) return;
+
+  //   const confirmMessage = `Are you sure you want to change the status to "${newStatus.toUpperCase()}"?`;
+  //   if (!window.confirm(confirmMessage)) return;
+
+  //   try {
+  //     await dispatch(UpdateOrderStatus({ orderId, status: newStatus })).unwrap();
+  //     toast.success(`Order status updated to ${newStatus.toUpperCase()}!`);
+  //     dispatch(GetSellerOrdersByID(orderId)); // refresh data
+  //   } catch (error) {
+  //     toast.error("Failed to update status: " + error);
+  //   }
+  // };
+
+  const handleStatusUpdate = async (newStatus) => {
+  if (!PersonalOrderData || !newStatus) return;
+
+  const restrictedStatuses = [
+    "confirmed",
+    "processing",
+    "shipped",
+    "delivered",
+    "return_completed",
+  ];
+
+  // Prevent cancelling confirmed or later orders
+  if (
+    newStatus === "cancelled" &&
+    restrictedStatuses.includes(PersonalOrderData.orderStatus)
+  ) {
+    toast.warning("You cannot cancel an order after it’s confirmed!");
+    return;
+  }
+
+  const confirmMessage = `Are you sure you want to change the status to "${newStatus.toUpperCase()}"?`;
+  if (!window.confirm(confirmMessage)) return;
+
+  try {
+    await dispatch(UpdateOrderStatus({ orderId, status: newStatus })).unwrap();
+    toast.success(`Order status updated to ${newStatus.toUpperCase()}!`);
+    dispatch(GetSellerOrdersByID(orderId)); // refresh data
+  } catch (error) {
+    toast.error("Failed to update status: " + error);
+  }
+};
+
 
   // Download invoice
   const handleDownloadInvoice = () => {
@@ -159,13 +206,13 @@ export const SellerOrderDetails = () => {
       description: "Order has been confirmed and is being processed",
       progress: 50,
     },
-    processing: {
-      color: "bg-purple-50 text-purple-800 border-purple-200",
-      icon: FaSync,
-      label: "Processing",
-      description: "Order is being prepared for shipment",
-      progress: 75,
-    },
+    // processing: {
+    //   color: "bg-purple-50 text-purple-800 border-purple-200",
+    //   icon: FaSync,
+    //   label: "Processing",
+    //   description: "Order is being prepared for shipment",
+    //   progress: 75,
+    // },
     shipped: {
       color: "bg-indigo-50 text-indigo-800 border-indigo-200",
       icon: FaShippingFast,
@@ -180,13 +227,13 @@ export const SellerOrderDetails = () => {
       description: "Order has been successfully delivered to customer",
       progress: 100,
     },
-    return_requested: {
-      color: "bg-orange-50 text-orange-800 border-orange-200",
-      icon: FaReply,
-      label: "Return Requested",
-      description: "Customer has requested return for this order",
-      progress: 25,
-    },
+    // return_requested: {
+    //   color: "bg-orange-50 text-orange-800 border-orange-200",
+    //   icon: FaReply,
+    //   label: "Return Requested",
+    //   description: "Customer has requested return for this order",
+    //   progress: 25,
+    // },
     return_completed: {
       color: "bg-red-50 text-red-800 border-red-200",
       icon: FaUndo,
@@ -324,7 +371,7 @@ export const SellerOrderDetails = () => {
             {/* Enhanced Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="flex gap-3">
-                {canDispatch && (
+                {/* {canDispatch && (
                   <button
                     onClick={() => handleStatusUpdate("dispatch")}
                     disabled={orderloading}
@@ -335,7 +382,66 @@ export const SellerOrderDetails = () => {
                       {orderloading ? "Dispatching..." : "Dispatch Order"}
                     </span>
                   </button>
-                )}
+                )} */}
+
+                {/* Order Status Update Dropdown */}
+                {/* <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl border shadow-sm">
+                  <label className="text-sm font-medium text-gray-700">
+                    Update Status:
+                  </label>
+                  <select
+                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={PersonalOrderData.orderStatus || ""}
+                    onChange={(e) => handleStatusUpdate(e.target.value)}
+                    disabled={orderloading}>
+                    <option value="">Select Status</option>
+                    {Object.keys(statusConfig).map((statusKey) => (
+                      <option key={statusKey} value={statusKey}>
+                        {statusConfig[statusKey].label}
+                      </option>
+                    ))}
+                  </select>
+                </div> */}
+
+                {/* Order Status Update Dropdown */}
+                <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl border shadow-sm">
+                  <label className="text-sm font-medium text-gray-700">
+                    Update Status:
+                  </label>
+                  <select
+                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={PersonalOrderData.orderStatus || ""}
+                    onChange={(e) => handleStatusUpdate(e.target.value)}
+                    disabled={orderloading}
+                  >
+                    <option value="">Select Status</option>
+                    {Object.keys(statusConfig).map((statusKey) => {
+                      // disable cancel if order is confirmed or beyond
+                      const disableCancel =
+                        statusKey === "cancelled" &&
+                        [
+                          "confirmed",
+                          "processing",
+                          "shipped",
+                          "delivered",
+                          "return_completed",
+                        ].includes(PersonalOrderData.orderStatus);
+
+                      return (
+                        <option
+                          key={statusKey}
+                          value={statusKey}
+                          disabled={disableCancel}
+                          className={disableCancel ? "text-gray-400" : "text-gray-800"}
+                        >
+                          {statusConfig[statusKey].label}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+
+
 
                 {canMarkReturnReceived && (
                   <button

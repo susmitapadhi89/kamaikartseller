@@ -105,12 +105,16 @@ export const EditProduct = () => {
           stock: prod.variants?.[0]?.stock || prod.stock || "",
           shipping_cost:
             prod.variants?.[0]?.shipping_cost || prod.shipping_cost || "",
-          images: [...(prod.images?.map((img) => img.image_url) || [])], // new array
+          //   images: [...(prod.images?.map((img) => img.image_url) || [])], // new array
+          images:
+            prod.images?.map((img) => ({
+              id: img.id,
+              image_url: img.image_url,
+            })) || [],
         });
       }
     }
   }, [PersonalProductdata]);
-
   const handleSubmit = async (productData) => {
     try {
       await dispatch(
