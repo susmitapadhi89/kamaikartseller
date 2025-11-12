@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
+import React, { useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css"; // default style
 import { Dashboard } from "./Pages/Dashboard";
 import { LoginForm } from "./Pages/Login";
@@ -16,8 +17,25 @@ import { PasswordChange } from "./Component/UserInfo/ChangePassword";
 import OrderList from "./Pages/OrderList";
 import { ListProducts } from "./Pages/Product/ListProduct";
 import { SellerOrderDetails } from "./Pages/Orderdetail";
+import { requestForToken, onMessageListener } from "./firebase";
 
 function App() {
+  useEffect(() => {
+    console.log("📲 Requesting permission for notifications...");
+    requestForToken().then((token) => {
+      if (token) {
+        console.log("📱 Device Token:", token);
+        // ✅ send token to your backend if needed
+      }
+    });
+ 
+    onMessageListener()
+      .then((payload) => {
+        console.log("📩 Foreground message received:", payload);
+        alert(payload.notification?.title + ": " + payload.notification?.body);
+      })
+      .catch((err) => console.error("Failed to receive foreground message", err));
+  }, []);
   const router = createBrowserRouter([
     {
       path: "/seller/register",
